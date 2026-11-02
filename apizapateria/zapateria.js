@@ -1,29 +1,42 @@
-const express = require('express');
-const cors = require('cors');
-//const rutacliente = require('./vista/ClienteRutas');
-//const rutaadmin = require('./vista/AdminRutas');
+require("dotenv").config();
+
+const express = require("express");
+const cors = require("cors");
+const rutaadmin = require("./vista/admin/RutasAdmin");
+const rutacliente = require("./vista/clientes/RutasClientes");
+const rutaproductos = require("./vista/clientes/RutasProductos");
+const rutacantidad = require("./vista/clientes/RutasCantidadCarrito");
+
 const app = express();
 const PORT = process.env.PORT || 3333;
+if (!process.env.PORT) {
+  console.warn("⚠️  PORT no está definido en .env, usando 3333");
+}
 
-// Midleware
-app.use(cors({
-    origin: '*', // Cambiar ['https://guillodelapena.xo.je/evidencias/', 'https://yo.com'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-    allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
-    credentials: true // Habilita el envío de credenciales si es necesario
-  }));
+// ---------- Middlewares ----------
+app.use(
+  cors({
+    origin: "*", // Cambiar a: ['http://guillodelapena.xo.je/evidencias/', 'http://yo.com']
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  }),
+);
 
-  // Midleware para parseo de solicitudes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rutas 
-//app.use('/', rutacliente);
-//app.use('/seguridad', rutaadmin);
-app.get('/', (req, res) =>{
-    res.send('¡Hola desde mi servidor en Node.js!');
+// ---------- Rutas ----------
+app.use("/", rutaadmin);
+app.use("/", rutacliente);
+app.use("/", rutaproductos);
+app.use("/", rutacantidad);
+
+app.get("/", (req, res) => {
+  res.send("¡Hola desde mi servidor node.js!");
 });
-// Iniciar el servidor
+
+// ---------- Iniciar servidor ----------
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-  });
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
