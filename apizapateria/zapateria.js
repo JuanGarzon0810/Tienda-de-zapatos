@@ -6,6 +6,8 @@ const rutaadmin = require("./vista/admin/RutasAdmin");
 const rutacliente = require("./vista/clientes/RutasClientes");
 const rutaproductos = require("./vista/clientes/RutasProductos");
 const rutacantidad = require("./vista/clientes/RutasCantidadCarrito");
+const rutacarrito = require("./vista/clientes/RutasCarrito");
+const rutapedidos = require("./vista/clientes/RutasPedidos");
 
 const app = express();
 const PORT = process.env.PORT || 3333;
@@ -31,6 +33,8 @@ app.use("/", rutaadmin);
 app.use("/", rutacliente);
 app.use("/", rutaproductos);
 app.use("/", rutacantidad);
+app.use("/", rutacarrito);
+app.use("/", rutapedidos);
 
 app.get("/", (req, res) => {
   res.send("¡Hola desde mi servidor node.js!");

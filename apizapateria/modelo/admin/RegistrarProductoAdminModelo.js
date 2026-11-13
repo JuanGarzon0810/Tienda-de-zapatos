@@ -2,9 +2,9 @@ const dbService = require("../bd/Conexion");
 
 class RegistrarProductoAdminModelo {
   // Insertar un nuevo producto
-  static async registrarProducto(nombre, descripcion, categoria, marca, precio, stock, imagen) {
+  static async registrarProducto(nombre, descripcion, categoria, marca, talla, precio, stock, imagen) {
     const query =
-      "INSERT INTO productos (nombre, descripcion, categoria, marca, precio, stock, imagen, estado) VALUES (?, ?, ?, ?, ?, ?, ?, 'Activo')";
+      "INSERT INTO productos (nombre, descripcion, categoria, marca, talla, precio, stock, imagen, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Activo')";
 
     try {
       return await dbService.query(query, [
@@ -12,6 +12,7 @@ class RegistrarProductoAdminModelo {
         descripcion,
         categoria,
         marca,
+        talla,
         precio,
         stock,
         imagen || null,

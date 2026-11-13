@@ -4,7 +4,7 @@ const LCRutas = require("../../controlador/clientes/LoginClienteControlador"); /
 
 const router = express.Router();
 
-router.post("/usuario/crear", CRutas.crearCliente); //RF01
-router.post("/cliente/login", LCRutas.validarCredencial); //RF02
+router.post("/api/auth/register", CRutas.crearCliente); // RF01
+router.post("/api/auth/login/cliente", LCRutas.validarCredencial); // RF02
 
 module.exports = router;

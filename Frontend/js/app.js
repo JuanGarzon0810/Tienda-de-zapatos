@@ -118,11 +118,13 @@ function renderizarProductos(productos) {
     }
     
     productos.forEach(producto => {
-        const tarjeta = document.createElement('div');
+        const tarjeta = document.createElement('a');
         tarjeta.className = 'producto-card';
-        tarjeta.onclick = () => irADetalle(producto.id);
+        tarjeta.href = 'detalle.html';
+        tarjeta.setAttribute('aria-label', `Ver ${producto.nombre}, ${producto.marca}, $${producto.precio.toFixed(2)}`);
+        tarjeta.addEventListener('click', () => localStorage.setItem('productoSeleccionado', producto.id));
         tarjeta.innerHTML = `
-            <div class="producto-img" style="font-size: 4rem;">${producto.imagen}</div>
+            <div class="producto-img" aria-hidden="true" style="font-size: 4rem;">${producto.imagen || '👟'}</div>
             <div class="producto-info">
                 <h4>${producto.nombre}</h4>
                 <p class="marca">${producto.marca} | ${producto.genero}</p>
@@ -209,6 +211,17 @@ document.addEventListener('DOMContentLoaded', () => {
             aplicarFiltros();
         });
     }
+
+    // Mantener los resultados sincronizados al cambiar un selector.
+    ['filtro-categoria', 'filtro-talla', 'filtro-marca'].forEach(id => {
+        const selector = document.getElementById(id);
+        if (selector) selector.addEventListener('change', () => {
+            filtrosActuales.categoria = document.getElementById('filtro-categoria').value;
+            filtrosActuales.talla = document.getElementById('filtro-talla').value;
+            filtrosActuales.marca = document.getElementById('filtro-marca').value;
+            aplicarFiltros();
+        });
+    });
     
     if (btnLimpiar) {
         btnLimpiar.addEventListener('click', () => {

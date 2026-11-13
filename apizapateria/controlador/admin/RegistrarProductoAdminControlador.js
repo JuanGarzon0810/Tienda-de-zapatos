@@ -10,18 +10,20 @@ class RegistrarProductoAdminControlador {
       t2: descripcion,
       t3: categoria,
       t4: marca,
-      t5: precio,
-      t6: stock,
-      t7: imagen, // opcional (URL)
+      t5: talla,
+      t6: precio,
+      t7: stock,
+      t8: imagen, // opcional (URL)
     } = req.body;
 
     // ------------ validaciones ------------
     const validaciones = [
-      RegistrarProductoAdminControlador.verCampos(nombre, descripcion, categoria, marca, precio, stock),
+      RegistrarProductoAdminControlador.verCampos(nombre, descripcion, categoria, marca, talla, precio, stock),
       RegistrarProductoAdminControlador.vernom(nombre),
       RegistrarProductoAdminControlador.verdesc(descripcion),
       RegistrarProductoAdminControlador.vertexto(categoria, "categoría"),
       RegistrarProductoAdminControlador.vertexto(marca, "marca"),
+      RegistrarProductoAdminControlador.vertalla(talla),
       RegistrarProductoAdminControlador.verprecio(precio),
       RegistrarProductoAdminControlador.verstock(stock),
       RegistrarProductoAdminControlador.verimagen(imagen),
@@ -39,6 +41,7 @@ class RegistrarProductoAdminControlador {
         String(descripcion).trim(),
         String(categoria).trim(),
         String(marca).trim(),
+        String(talla).trim(),
         Number(precio),
         Number(stock),
         imagen ? String(imagen).trim() : null,
@@ -60,13 +63,14 @@ class RegistrarProductoAdminControlador {
 
   //-------------------validaciones----------------------------
 
-  static verCampos(nombre, descripcion, categoria, marca, precio, stock) {
+  static verCampos(nombre, descripcion, categoria, marca, talla, precio, stock) {
     const vacio = (v) => v === undefined || v === null || String(v).trim() === "";
     if (
       vacio(nombre) ||
       vacio(descripcion) ||
       vacio(categoria) ||
       vacio(marca) ||
+      vacio(talla) ||
       vacio(precio) ||
       vacio(stock)
     ) {
@@ -97,6 +101,13 @@ class RegistrarProductoAdminControlador {
     return null;
   }
 
+  static vertalla(talla) {
+    if (!/^[A-Za-z0-9.\-\/]{1,10}$/.test(String(talla).trim())) {
+      return "La talla debe tener entre 1 y 10 caracteres (letras, números, . - /).";
+    }
+    return null;
+  }
+
   static verprecio(precio) {
     const p = Number(precio);
     if (!Number.isFinite(p) || p <= 0 || p > 99999999) {
@@ -117,8 +128,13 @@ class RegistrarProductoAdminControlador {
     if (imagen === undefined || imagen === null || String(imagen).trim() === "") {
       return null; // es opcional
     }
-    if (!/^https?:\/\/[^\s]{3,500}$/.test(String(imagen).trim())) {
-      return "La imagen debe ser una URL válida (http o https).";
+    const valor = String(imagen).trim();
+    const esUrl = /^https?:\/\/[^\s]{3,500}$/.test(valor);
+    const esRutaLocal =
+      !valor.includes("..") &&
+      /^(?:\.{0,2}\/)?[\w\-./]+\.(?:jpe?g|png|webp|avif|gif)$/i.test(valor);
+    if (!esUrl && !esRutaLocal) {
+      return "La imagen debe ser una URL http(s) o una ruta local válida.";
     }
     return null;
   }

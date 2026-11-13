@@ -5,7 +5,7 @@ class VisualizarProductosModelo {
   // (los eliminados con el RF06 quedan 'Inactivo' y no aparecen).
   static async listarProductos() {
     const query =
-      "SELECT idProducto AS id, nombre, marca, categoria, talla, precio, imagen " +
+      "SELECT idProducto AS id, nombre, descripcion, marca, categoria, talla, precio, stock, imagen " +
       "FROM productos WHERE estado = 'Activo' ORDER BY nombre ASC, talla ASC";
 
     try {
